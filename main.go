@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Christomesh/pugasell/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,9 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.Logger())
+
+	routes.AuthRoutes(router)
+	routes.UserRoutes(router)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Welcome to PUGASELL"})
