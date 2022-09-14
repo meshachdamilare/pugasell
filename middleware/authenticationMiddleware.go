@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Authentication() gin.HandlerFunc {
+func AuthenticateUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token, _ := c.Cookie("token")
 		if token == "" {
@@ -28,14 +28,16 @@ func Authentication() gin.HandlerFunc {
 	}
 }
 
-func AuthorizedPermission(c *gin.Context, role string) (err error) {
-	resourceRole := c.GetString("role")
-	err = nil
-	if resourceRole != role {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized to access this route"})
-		return
+func AuthorizedPermissions(role string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		resourceRole := c.GetString("role")
+		if resourceRole != role {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Unauthorized to access this route"})
+			c.Abort()
+			return
+		}
+		c.Next()
 	}
-	return err
 }
 
 func CheckPermission(c *gin.Context, requestUserId string) (err error) {
@@ -46,6 +48,5 @@ func CheckPermission(c *gin.Context, requestUserId string) (err error) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not Authorized to access this route"})
 		return
 	}
-	err = AuthorizedPermission(c, role)
 	return err
 }
