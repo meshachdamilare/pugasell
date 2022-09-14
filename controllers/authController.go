@@ -60,13 +60,45 @@ func Signup() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "user was not created"})
 		}
 
-		c.JSON(http.StatusOK, insertNum)
+		// Generate token and attch it to cookie
+		util.GenerateToken(c, user.Email, user.User_id, user.Role)
+
+		// json response to user
+		jsonResponse := make(map[string]interface{})
+		jsonResponse["ID"] = insertNum
+		jsonResponse["sucess"] = "user created"
+		c.JSON(http.StatusOK, jsonResponse)
 
 	}
 }
 
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		var user models.LoginModel
+		var foundUser models.User
 
+		if err := c.BindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if validateErr := validate.Struct(user); validateErr != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
+			return
+		}
+		err := Usercollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "No user found with the email"})
+			return
+		}
+		passwordIsValid, msg := util.VerifyPassword(user.Password, foundUser.Password)
+		if !passwordIsValid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": msg})
+			return
+		}
+
+		util.GenerateToken(c, foundUser.Email, foundUser.User_id, foundUser.Role)
+		c.JSON(http.StatusOK, gin.H{"success": "you're logged in."})
 	}
 }
