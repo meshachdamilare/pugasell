@@ -13,8 +13,13 @@ type User struct {
 	Email      string             `json:"email" validate:"required,email"`
 	Avatar     string             `json:"avatar"`
 	Password   string             `json:"password" validate:"required,min=6"`
-	Role       string             `json:"role" default:"USER" validate:"required,ADMIN|USER"`
+	Role       string             `json:"role" default:"USER" validate:"omitempty,eq=ADMIN|eq=USER"`
 	User_id    string             `json:"user_id"`
 	Created_at time.Time          `json:"created_at"`
 	Updated_at time.Time          `json:"updated_at"`
+}
+
+type LoginModel struct {
+	Email    string `json:"email" validate:"email,required"`
+	Password string `json:"password" validate:"required,min=6"`
 }
