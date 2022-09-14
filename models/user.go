@@ -12,7 +12,7 @@ type User struct {
 	Last_name  string             `json:"last_name" validate:"required,min=2,max=50"`
 	Email      string             `json:"email" validate:"required,email"`
 	Avatar     string             `json:"avatar"`
-	Password   string             `json:"password" validate:"min=6"`
+	Password   string             `json:"password" validate:"required,min=6"`
 	Role       string             `json:"role" default:"USER" validate:"required,ADMIN|USER"`
 	User_id    string             `json:"user_id"`
 	Created_at time.Time          `json:"created_at"`
