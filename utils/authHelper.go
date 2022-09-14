@@ -14,8 +14,8 @@ func HashPassword(password string) string {
 	return string(bytepassword)
 }
 
-func VerifyPassword(userPassword string, providedPassword string) (bool, string) {
-	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
+func VerifyPassword(candidatePassword string, password string) (bool, string) {
+	err := bcrypt.CompareHashAndPassword([]byte(password), []byte(candidatePassword))
 	check := true
 	msg := ""
 	if err != nil {
