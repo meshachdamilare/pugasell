@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	middleware "github.com/Christomesh/pugasell/middleware"
 	"github.com/Christomesh/pugasell/routes"
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +22,7 @@ func main() {
 	routes.AuthRoutes(router)
 	routes.UserRoutes(router)
 
-	router.GET("/", func(c *gin.Context) {
+	router.GET("/api/v1", middleware.AuthenticateUser(), middleware.AuthorizedPermissions("ADMIN"), func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Welcome to PUGASELL"})
 	})
 
