@@ -26,18 +26,22 @@ func Signup() gin.HandlerFunc {
 		var user models.User
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 		if validationErr := validate.Struct(user); validationErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+			return
 		}
 
 		count, err := Usercollection.CountDocuments(ctx, bson.M{"email": user.Email})
 		if err != nil {
 			log.Fatal(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"err": "error checking for email"})
+			return
 		}
 		if count > 0 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Email already exits"})
+			return
 		}
 
 		// first registered user is an admin
@@ -58,6 +62,7 @@ func Signup() gin.HandlerFunc {
 		insertNum, insertErr := Usercollection.InsertOne(ctx, user)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "user was not created"})
+			return
 		}
 
 		// Generate token and attch it to cookie
@@ -105,7 +110,7 @@ func Login() gin.HandlerFunc {
 
 func Logout() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.SetCookie("jwt", "", -30, "/", "localhost", false, true)
+		c.SetCookie("token", "", -1, "/", "localhost", false, true)
 		c.JSON(http.StatusOK, gin.H{"message": "user logged out"})
 	}
 }
