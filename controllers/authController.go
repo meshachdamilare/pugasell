@@ -102,3 +102,10 @@ func Login() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"success": "you're logged in."})
 	}
 }
+
+func Logout() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.SetCookie("jwt", "", -30, "/", "localhost", false, true)
+		c.JSON(http.StatusOK, gin.H{"message": "user logged out"})
+	}
+}
