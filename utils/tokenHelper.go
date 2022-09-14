@@ -35,3 +35,29 @@ func GenerateToken(c *gin.Context, email string, user_id string, role string) {
 	c.SetCookie("token", token, 60, "/", "localhost", false, true)
 
 }
+
+func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
+	token, err := jwt.ParseWithClaims(
+		signedToken,
+		&SignedDetails{},
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(SECRET_KEY), nil
+		},
+	)
+	if err != nil {
+		msg = err.Error()
+		return
+	}
+	claims, ok := token.Claims.(*SignedDetails)
+	if !ok {
+		msg = "the token is invalid"
+		msg = err.Error()
+		return
+	}
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		msg = "token is expired"
+		msg = err.Error()
+		return
+	}
+	return claims, msg
+}
