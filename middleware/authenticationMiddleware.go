@@ -9,7 +9,14 @@ import (
 
 func AuthenticateUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token, _ := c.Cookie("token")
+
+		var token string
+		// authHeader := c.Request.Header.Get("token")
+		// if authHeader == "" && strings.HasPrefix(authHeader, "Bearer") {
+		// 	token = strings.Split(authHeader, " ")[1]
+		// }
+
+		token, _ = c.Cookie("token")
 		if token == "" {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "No authorization header provided"})
 			c.Abort()
