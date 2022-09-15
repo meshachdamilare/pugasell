@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 
 	util "github.com/Christomesh/pugasell/utils"
@@ -18,7 +19,7 @@ func AuthenticateUser() gin.HandlerFunc {
 
 		token, _ = c.Cookie("token")
 		if token == "" {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "No authorization header provided"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication Invalid"})
 			c.Abort()
 			return
 		}
@@ -52,8 +53,8 @@ func CheckPermission(c *gin.Context, requestUserId string) (err error) {
 	resourceUserId := c.GetString("userId")
 	err = nil
 	if role == "USER" && resourceUserId != requestUserId {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not Authorized to access this route"})
-		return
+		err = errors.New("not Authorized to access this resource")
+		return err
 	}
 	return err
 }
