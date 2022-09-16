@@ -166,65 +166,65 @@ func UpdateUser() gin.HandlerFunc {
 	}
 }
 
-// func UpdateUserPassword() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-// 		defer cancel()
+func UpdateUserPassword() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
 
-// 		var changePassword models.ChangePasswordModel
-// 		var foundUser models.User
+		var changePassword models.ChangePasswordModel
+		var foundUser models.User
 
-// 		if err := c.BindJSON(&changePassword); err != nil {
-// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 			return
-// 		}
-// 		if validateErr := validate.Struct(changePassword); validateErr != nil {
-// 			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
-// 			return
-// 		}
+		if err := c.BindJSON(&changePassword); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if validateErr := validate.Struct(changePassword); validateErr != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
+			return
+		}
 
-// 		userId := c.GetString("userId")
+		userId := c.GetString("userId")
 
-// 		var updateObj primitive.D
+		var updateObj primitive.D
 
-// 		err := Usercollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
-// 		if err != nil {
-// 			msg := "message:User was not found"
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
-// 			return
-// 		}
-// 		isPasswordCorrect, msg := util.VerifyPassword(changePassword.OldPassword, foundUser.Password)
-// 		if !isPasswordCorrect {
-// 			c.JSON(http.StatusUnauthorized, gin.H{"error": msg})
-// 		}
+		err := Usercollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
+		if err != nil {
+			msg := "message:User was not found"
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+			return
+		}
+		isPasswordCorrect, msg := util.VerifyPassword(changePassword.OldPassword, foundUser.Password)
+		if !isPasswordCorrect {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": msg})
+		}
 
-// 		if changePassword.NewPassword != "" {
-// 			newPassword := util.HashPassword(changePassword.NewPassword)
-// 			updateObj = append(updateObj, bson.E{Key: "password", Value: newPassword})
+		if changePassword.NewPassword != "" {
+			newPassword := util.HashPassword(changePassword.NewPassword)
+			updateObj = append(updateObj, bson.E{Key: "password", Value: newPassword})
 
-// 		}
+		}
 
-// 		uspsert := true
-// 		filter := bson.M{"user_id": userId}
+		uspsert := true
+		filter := bson.M{"user_id": userId}
 
-// 		opt := options.UpdateOptions{
-// 			Upsert: &uspsert,
-// 		}
+		opt := options.UpdateOptions{
+			Upsert: &uspsert,
+		}
 
-// 		result, err := Usercollection.UpdateOne(
-// 			ctx,
-// 			filter,
-// 			bson.D{
-// 				{Key: "$set", Value: updateObj},
-// 			},
-// 			&opt,
-// 		)
-// 		if err != nil {
-// 			msg := "failed to change password"
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
-// 			return
-// 		}
+		result, err := Usercollection.UpdateOne(
+			ctx,
+			filter,
+			bson.D{
+				{Key: "$set", Value: updateObj},
+			},
+			&opt,
+		)
+		if err != nil {
+			msg := "failed to change password"
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+			return
+		}
 
-// 		c.JSON(http.StatusOK, gin.H{"message": "Password successfully changed", "result": result.ModifiedCount})
-// 	}
-// }
+		c.JSON(http.StatusOK, gin.H{"message": "Password successfully changed", "result": result.ModifiedCount})
+	}
+}
