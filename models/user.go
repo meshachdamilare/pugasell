@@ -35,3 +35,16 @@ type LoginModel struct {
 	Email    string `json:"email" validate:"email,required"`
 	Password string `json:"password" validate:"required,min=6"`
 }
+
+type UpdateUserModel struct {
+	First_name string    `json:"first_name" validate:"required,min=2,max=50"`
+	Last_name  string    `json:"last_name" validate:"required,min=2,max=50"`
+	Email      string    `json:"email" validate:"required,email"`
+	Avatar     string    `json:"avatar,omitempty"`
+	Updated_at time.Time `json:"updated_at"`
+}
+
+// type ChangePasswordModel struct {
+// 	OldPassword string `json:"old_password" validate:"required,min=6"`
+// 	NewPassword string `json:"new_password" validate:"required,min=6"`
+// }
