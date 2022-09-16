@@ -44,7 +44,7 @@ type UpdateUserModel struct {
 	Updated_at time.Time `json:"updated_at"`
 }
 
-// type ChangePasswordModel struct {
-// 	OldPassword string `json:"old_password" validate:"required,min=6"`
-// 	NewPassword string `json:"new_password" validate:"required,min=6"`
-// }
+type ChangePasswordModel struct {
+	OldPassword string `json:"old_password" validate:"required,min=6"`
+	NewPassword string `json:"new_password" validate:"required,min=6"`
+}
