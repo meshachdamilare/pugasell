@@ -10,7 +10,7 @@ func UserRoutes(router *gin.Engine) {
 	user := router.Group("/api/v1/users")
 	{
 
-		// Omly logged-in users can access this routes
+		// Omly logged-in users can access the routes below
 		user.Use(middleware.AuthenticateUser())
 
 		user.GET("/showMe", controller.ShowCurrentUser())
@@ -18,7 +18,7 @@ func UserRoutes(router *gin.Engine) {
 		user.PATCH("/updateuser", controller.UpdateUser())
 		user.PATCH("/updatepassword", controller.UpdateUserPassword())
 
-		// Only Admin can access this resource
+		// Only Admin can access this routes
 		user.Use(middleware.AuthorizedPermissions("ADMIN"))
 		user.GET("/", controller.GetAllUsers())
 
