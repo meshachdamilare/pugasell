@@ -15,9 +15,9 @@ func ReviewRoutes(router *gin.Engine) {
 		// ONly logged-in users can access the routes below
 		review.Use(middleware.AuthenticateUser())
 
-		review.POST("/", controller.CreateProduct())
+		review.POST("/", controller.CreateReview())
 		review.PATCH("/:review_id", controller.UpdateReview())
-		review.DELETE("/:review_id", controller.DeleteProduct())
+		review.DELETE("/:review_id", controller.DeleteReview())
 
 	}
 }

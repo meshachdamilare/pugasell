@@ -11,6 +11,7 @@ func ProductRoutes(router *gin.Engine) {
 	{
 		product.GET("/", controller.GetAllProducts())
 		product.GET("/:product_id", controller.GetSingleProduct())
+		//product.GET("/:product_id/", controller.GetSingleProductReviews())
 
 		// ONly admin can access this resource
 		product.Use(middleware.AuthenticateUser(), middleware.AuthorizedPermissions("ADMIN"))

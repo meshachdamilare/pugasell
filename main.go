@@ -22,6 +22,7 @@ func main() {
 	routes.AuthRoutes(router)
 	routes.UserRoutes(router)
 	routes.ProductRoutes(router)
+	routes.ReviewRoutes(router)
 
 	router.GET("/api/v1", middleware.AuthenticateUser(), middleware.AuthorizedPermissions("ADMIN"), func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Welcome to PUGASELL"})
