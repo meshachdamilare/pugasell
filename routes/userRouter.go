@@ -9,10 +9,20 @@ import (
 func UserRoutes(router *gin.Engine) {
 	user := router.Group("/api/v1/users")
 	{
-		user.GET("/", middleware.AuthenticateUser(), middleware.AuthorizedPermissions("ADMIN"), controller.GetAllUsers())
-		user.GET("/showMe", middleware.AuthenticateUser(), controller.ShowCurrentUser())
-		user.GET("/:userId", middleware.AuthenticateUser(), controller.GetSingleUser())
-		user.PATCH("/updateuser", middleware.AuthenticateUser(), controller.UpdateUser())
-		user.PATCH("/updatepassword", middleware.AuthenticateUser(), controller.UpdateUserPassword())
+
+		// Omly logged-in users can access this routes
+		user.Use(middleware.AuthenticateUser())
+
+		user.GET("/showMe", controller.ShowCurrentUser())
+		user.GET("/:userId", controller.GetSingleUser())
+		user.PATCH("/updateuser", controller.UpdateUser())
+		user.PATCH("/updatepassword", controller.UpdateUserPassword())
+
+		// Only Admin can access this resource
+		user.Use(middleware.AuthorizedPermissions("ADMIN"))
+		user.GET("/", controller.GetAllUsers())
+
+		// Another way to use the middleware
+		// user.GET("/showMe",middleware.AuthenticateUser(), controller.ShowCurrentUser())
 	}
 }
