@@ -131,7 +131,6 @@ func UpdateProduct() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
 			return
 		}
-		//get userId of logged in user via details stored in the cookie
 
 		var updateObj primitive.D
 
@@ -192,7 +191,7 @@ func UpdateProduct() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": "Successfully updated", "result": result.ModifiedCount})
+		c.JSON(http.StatusOK, gin.H{"message": "Product successfully updated", "result": result.ModifiedCount})
 
 	}
 }
@@ -208,6 +207,6 @@ func DeleteProduct() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": "producted deleted", "count": result.DeletedCount})
+		c.JSON(http.StatusOK, gin.H{"message": "product deleted", "count": result.DeletedCount})
 	}
 }
