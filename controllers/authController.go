@@ -17,7 +17,7 @@ import (
 )
 
 var validate = validator.New()
-var Usercollection *mongo.Collection = db.OpenCollection(db.Client, "user")
+var UserCollection *mongo.Collection = db.OpenCollection(db.Client, "user")
 
 func Signup() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -33,7 +33,7 @@ func Signup() gin.HandlerFunc {
 			return
 		}
 
-		count, err := Usercollection.CountDocuments(ctx, bson.M{"email": user.Email})
+		count, err := UserCollection.CountDocuments(ctx, bson.M{"email": user.Email})
 		if err != nil {
 			log.Fatal(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"err": "error checking for email"})
@@ -45,7 +45,7 @@ func Signup() gin.HandlerFunc {
 		}
 
 		// first registered user is an admin
-		isFirstAccount, _ := Usercollection.CountDocuments(ctx, bson.M{})
+		isFirstAccount, _ := UserCollection.CountDocuments(ctx, bson.M{})
 		if isFirstAccount == 0 {
 			user.Role = "ADMIN"
 		} else {
@@ -59,7 +59,7 @@ func Signup() gin.HandlerFunc {
 		user.ID = primitive.NewObjectID()
 		user.User_id = user.ID.Hex()
 
-		insertNum, insertErr := Usercollection.InsertOne(ctx, user)
+		insertNum, insertErr := UserCollection.InsertOne(ctx, user)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "user was not created"})
 			return
@@ -92,7 +92,7 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
 			return
 		}
-		err := Usercollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
+		err := UserCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "No user found with the email"})
 			return
