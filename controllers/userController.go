@@ -31,7 +31,7 @@ func GetAllUsers() gin.HandlerFunc {
 		// }
 		// skip := (page - 1) * limit
 
-		length, err := Usercollection.CountDocuments(ctx, bson.M{"role": "USER"})
+		length, err := UserCollection.CountDocuments(ctx, bson.M{"role": "USER"})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 			return
@@ -40,7 +40,7 @@ func GetAllUsers() gin.HandlerFunc {
 		// to exclude the password field from the result obtained and response object
 		opts := options.Find().SetProjection(bson.D{{Key: "password", Value: 0}})
 
-		cursor, err := Usercollection.Find(ctx, bson.M{"role": "USER"}, opts)
+		cursor, err := UserCollection.Find(ctx, bson.M{"role": "USER"}, opts)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 			return
@@ -69,7 +69,7 @@ func GetSingleUser() gin.HandlerFunc {
 		}
 
 		opts := options.FindOne().SetProjection(bson.D{{Key: "password", Value: 0}})
-		err := Usercollection.FindOne(ctx, bson.M{"user_id": userId}, opts).Decode(&userResponse)
+		err := UserCollection.FindOne(ctx, bson.M{"user_id": userId}, opts).Decode(&userResponse)
 
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -129,7 +129,7 @@ func UpdateUser() gin.HandlerFunc {
 
 		}
 
-		err := Usercollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
+		err := UserCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
 		if err != nil {
 			msg := "message:User was not found"
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
@@ -147,7 +147,7 @@ func UpdateUser() gin.HandlerFunc {
 			Upsert: &uspsert,
 		}
 
-		result, err := Usercollection.UpdateOne(
+		result, err := UserCollection.UpdateOne(
 			ctx,
 			filter,
 			bson.D{
@@ -187,7 +187,7 @@ func UpdateUserPassword() gin.HandlerFunc {
 
 		var updateObj primitive.D
 
-		err := Usercollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
+		err := UserCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundUser)
 		if err != nil {
 			msg := "message:User was not found"
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
@@ -211,7 +211,7 @@ func UpdateUserPassword() gin.HandlerFunc {
 			Upsert: &uspsert,
 		}
 
-		result, err := Usercollection.UpdateOne(
+		result, err := UserCollection.UpdateOne(
 			ctx,
 			filter,
 			bson.D{
