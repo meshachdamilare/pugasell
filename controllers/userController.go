@@ -110,7 +110,7 @@ func UpdateUser() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": validateErr.Error()})
 			return
 		}
-		//get userId of logged in user via details stored in the cookie
+		//get userId of the logged-in user via details stored in the jwt-token through cookie
 		userId := c.GetString("userId")
 		role := c.GetString("role")
 
