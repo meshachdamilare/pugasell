@@ -1,6 +1,10 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Review struct {
 	ID         primitive.ObjectID `bson:"_id"`
@@ -9,4 +13,6 @@ type Review struct {
 	Comment    string             `json:"comment" validate:"required"`
 	User_id    string             `json:"user_id"`
 	Product_id string             `json:"product_id"`
+	Created_at time.Time          `json:"created_at"`
+	Updated_at time.Time          `json:"updated_at"`
 }
