@@ -32,10 +32,24 @@ type Product struct {
 	User_id         string             `json:"user_id"`
 	Created_at      time.Time          `json:"created_at"`
 	Updated_at      time.Time          `json:"updated_at"`
-	Reviews         []Review           `json:"reviews" bson:"-"` // we dont strore reviews in the db... this will be used as response to the user
+	//Reviews         []Review           `json:"reviews" bson:"-"` // we dont strore reviews in the db... this will be used as response to the user
+}
+
+type UpdateProduct struct {
+	Name         string    `json:"name" validate:"required,min=2,max=100"`
+	Price        float64   `json:"price" default:"0" validate:"required"`
+	Description  string    `json:"description" validate:"required,max=1000"`
+	Image        string    `json:"image" default:"/uploads/example.jpeg"`
+	Category     string    `json:"category" validate:"required,eq=kitchen|eq=office|eq=bedroom"`
+	Company      string    `json:"company" validate:"required,eq=ikea|eq=liddy|eq=marcos"`
+	Colors       []string  `json:"colors" default:"[#2222]" validate:"required"`
+	Featured     bool      `json:"featured" default:"false"`
+	FreeShipping bool      `json:"freeShipping" default:"false"`
+	Inventory    float64   `json:"inventory,omitempty" default:"15"`
+	Updated_at   time.Time `json:"updated_at"`
 }
 
 type ProductResponse struct {
 	Product Product
-	Review  []Review
+	Review  []Review `json:"reviews"`
 }
