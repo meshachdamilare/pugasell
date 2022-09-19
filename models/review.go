@@ -18,7 +18,8 @@ type Review struct {
 }
 
 type UpdateReview struct {
-	Rating  float64 `json:"rating" validate:"required,min=1,max=5"`
-	Title   string  `json:"title" validate:"required,max=50"`
-	Comment string  `json:"comment" validate:"required"`
+	Rating     float64   `json:"rating" validate:"required,min=1,max=5"`
+	Title      string    `json:"title" validate:"required,max=50"`
+	Comment    string    `json:"comment" validate:"required"`
+	Updated_at time.Time `json:"updated_at"`
 }
