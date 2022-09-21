@@ -132,6 +132,21 @@ func GetSingleOrder() gin.HandlerFunc {
 
 func GetCurrentUserOrders() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+
+		userId := c.GetString("userId")
+
+		cursor, err := OrderCollection.Find(ctx, bson.M{"user_id": userId})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+		var myOrder []models.OrderItems
+		if err := cursor.All(ctx, &myOrder); err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(http.StatusOK, gin.H{"products": myOrder, "counts": len(myOrder) + 1})
 
 	}
 }
