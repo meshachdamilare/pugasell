@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Christomesh/pugasell/db"
+	"github.com/Christomesh/pugasell/middleware"
 	"github.com/Christomesh/pugasell/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -112,7 +113,20 @@ func GetAllOrders() gin.HandlerFunc {
 
 func GetSingleOrder() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+		orderId, _ := primitive.ObjectIDFromHex(c.Param("order_id"))
+		var orderResponse models.OrderItems
+		err := OrderCollection.FindOne(ctx, bson.M{"_id": orderId}).Decode(&orderResponse)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if err := middleware.CheckPermission(c, orderResponse.User_id); err != nil {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Not authorized to access this resouce"})
+		}
 
+		c.JSON(http.StatusOK, orderResponse)
 	}
 }
 
