@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -88,7 +89,24 @@ func CreateOrder() gin.HandlerFunc {
 
 func GetAllOrders() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
 
+		length, err := OrderCollection.CountDocuments(ctx, bson.M{})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+		cursor, err := OrderCollection.Find(ctx, bson.M{})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+		var orderResponse []models.OrderItems
+		if err := cursor.All(ctx, &orderResponse); err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(http.StatusOK, gin.H{"products": orderResponse, "counts": length})
 	}
 }
 
