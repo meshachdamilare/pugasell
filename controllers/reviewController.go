@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Christomesh/pugasell/db"
-	middleware "github.com/Christomesh/pugasell/middleware"
-	"github.com/Christomesh/pugasell/models"
 	"github.com/gin-gonic/gin"
+	"github.com/meshachdamilare/pugasell/db"
+	middleware "github.com/meshachdamilare/pugasell/middleware"
+	"github.com/meshachdamilare/pugasell/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -1,8 +1,8 @@
 package routes
 
 import (
-	controller "github.com/Christomesh/pugasell/controllers"
 	"github.com/gin-gonic/gin"
+	controller "github.com/meshachdamilare/pugasell/controllers"
 )
 
 func AuthRoutes(router *gin.Engine) {

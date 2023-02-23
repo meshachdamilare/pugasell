@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	middleware "github.com/Christomesh/pugasell/middleware"
-	"github.com/Christomesh/pugasell/routes"
 	"github.com/gin-gonic/gin"
+	middleware "github.com/meshachdamilare/pugasell/middleware"
+	"github.com/meshachdamilare/pugasell/routes"
 )
 
 func main() {

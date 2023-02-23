@@ -1,9 +1,9 @@
 package routes
 
 import (
-	controller "github.com/Christomesh/pugasell/controllers"
-	middleware "github.com/Christomesh/pugasell/middleware"
 	"github.com/gin-gonic/gin"
+	controller "github.com/meshachdamilare/pugasell/controllers"
+	middleware "github.com/meshachdamilare/pugasell/middleware"
 )
 
 func ReviewRoutes(router *gin.Engine) {

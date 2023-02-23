@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	middleware "github.com/Christomesh/pugasell/middleware"
-	"github.com/Christomesh/pugasell/models"
-	util "github.com/Christomesh/pugasell/utils"
 	"github.com/gin-gonic/gin"
+	middleware "github.com/meshachdamilare/pugasell/middleware"
+	"github.com/meshachdamilare/pugasell/models"
+	util "github.com/meshachdamilare/pugasell/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"

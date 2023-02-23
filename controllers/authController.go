@@ -2,15 +2,15 @@ package controllers
 
 import (
 	"context"
+	"github.com/go-playground/validator/v10"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/Christomesh/pugasell/db"
-	"github.com/Christomesh/pugasell/models"
-	util "github.com/Christomesh/pugasell/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
+	"github.com/meshachdamilare/pugasell/db"
+	"github.com/meshachdamilare/pugasell/models"
+	util "github.com/meshachdamilare/pugasell/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

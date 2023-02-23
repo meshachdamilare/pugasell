@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	util "github.com/Christomesh/pugasell/utils"
 	"github.com/gin-gonic/gin"
+	util "github.com/meshachdamilare/pugasell/utils"
 )
 
 func AuthenticateUser() gin.HandlerFunc {
