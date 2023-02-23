@@ -12,7 +12,7 @@ func ReviewRoutes(router *gin.Engine) {
 		review.GET("/:review_id", controller.GetSingleReview())
 		review.GET("/", controller.GetAllReviews())
 
-		// ONly logged-in users can access the routes below
+		// ONly logged-in users can access the route below
 		review.Use(middleware.AuthenticateUser())
 
 		review.POST("/", controller.CreateReview())
